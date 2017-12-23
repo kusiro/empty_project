@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     entry: './src/main.js',
@@ -38,6 +39,30 @@ module.exports = {
                 test: /\.jpg|png|gif|svg$/,
                 use: [
                     'file-loader',
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                progressive: true,
+                                quality: 10,
+                            },
+                            optipng: {
+                                enable: false,
+                            },
+                            pngquant: {
+                                quality: 10,
+                                speed: 1,
+                            },
+                            svgo: {
+                                quality: 10,
+                            },{
+                                gifsicle: {
+                                    interlaced: false,
+                                    quality: 10,
+                                }
+                            }
+                        }
+                    }
                 ]
             }
         ]
@@ -50,6 +75,7 @@ module.exports = {
     },
 
     plugins: [
+        new CleanWebpackPlugin(['public']),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
             $: 'jquery',
